@@ -33,8 +33,7 @@ dim(df5)
 4. Data Preprocessing
 sapply(ls(df1),class)
 
-
-4. Data Cleaning
+5. Data Cleaning
 df1_clean = na.omit(df1)
 df2_clean = na.omit(df2)
 df3_clean = na.omit(df3) # Has 1 row with missing value(s)
@@ -47,15 +46,9 @@ dim(df3_clean)
 dim(df4_clean)
 dim(df5_clean)
 
-
-
-
-
-
-
 ls(df1) # Same as colnames(df1)
 
-4. Preprocessing Data with Categorical Features
+6. Preprocessing Data with Categorical Features
 library(caret)
 oneh=dummyVars(~.,data=df1)
 final_df=data.frame(predict(oneh,newdata=df1))
