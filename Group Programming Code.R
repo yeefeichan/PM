@@ -16,7 +16,7 @@ df1 = read.csv(unz("census+income.zip", "adult.data"), header=F)
 df2 = read.csv(unz("census+income.zip", "adult.names"), header=F)
 df3 = read.csv(unz("census+income.zip", "adult.test"), header=F)
 df4 = read.csv(unz("census+income.zip", "Index"))
-df5 = read.csv(unz("census+income.zip", "old.adult.names"))
+df5 = read.csv(unz("census+income.zip", "old.adult.names"), header=F)
 
 View(df1)
 View(df2)
