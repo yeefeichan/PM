@@ -31,7 +31,7 @@ dim(df4)
 dim(df5)
 
 4. Data Preprocessing
-sapply(ls(df1),class)
+sapply(df1,class)
 
 5. Data Cleaning
 df1_clean = na.omit(df1)
@@ -50,5 +50,5 @@ ls(df1) # Same as colnames(df1)
 
 6. Preprocessing Data with Categorical Features
 library(caret)
-oneh=dummyVars(~.,data=df1)
-final_df=data.frame(predict(oneh,newdata=df1))
+oneh = dummyVars( ~ ., data=df1)
+final_df1 = data.frame(predict(oneh, newdata=df1))
