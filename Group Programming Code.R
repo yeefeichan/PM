@@ -12,7 +12,7 @@ Group Assignment
 
 library(ISLR2)
 
-df1 = read.csv(unz("census+income.zip", "adult.data"))
+df1 = read.csv(unz("census+income.zip", "adult.data"), header=F)
 df2 = read.csv(unz("census+income.zip", "adult.names"), header=F)
 df3 = read.csv(unz("census+income.zip", "adult.test"), header=F)
 df4 = read.csv(unz("census+income.zip", "Index"))
