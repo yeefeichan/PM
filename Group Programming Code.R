@@ -34,13 +34,9 @@ dim(df5)
 sapply(df1,class)
 
 5. Data Cleaning
-summary(df1)
-
 # library(dplyr)
 # sapply(df1,unique)
 # sapply(df1,is.character)
-
-summary(df3)
 
 df1_clean = na.omit(df1)
 df2_clean = na.omit(df2)
