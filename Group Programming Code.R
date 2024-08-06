@@ -46,18 +46,6 @@ table(df1$V15)
 
 # V2, V7, V14 has "?"
 
-df1_clean = na.omit(df1)
-df2_clean = na.omit(df2)
-df3_clean = na.omit(df3) # Has 1 row with missing value(s)
-df4_clean = na.omit(df4)
-df5_clean = na.omit(df5)
-
-dim(df1_clean)
-dim(df2_clean)
-dim(df3_clean)
-dim(df4_clean)
-dim(df5_clean)
-
 ls(df1) # Same as colnames(df1)
 
 6. Preprocessing Data with Categorical Features
