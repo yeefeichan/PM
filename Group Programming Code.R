@@ -46,6 +46,9 @@ table(df1$V15)
 
 # V2, V7, V14 has "?"
 
+df1$V14 = replace(df1$V14, df1$V14 == " ?", NA)
+# df1 = na.omit(df1)
+
 ls(df1) # Same as colnames(df1)
 
 6. Preprocessing Data with Categorical Features
