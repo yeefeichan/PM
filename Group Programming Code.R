@@ -35,6 +35,7 @@ sapply(df1,class)
 
 df3 = df3[ -1,]
 rownames(df3) = seq_len(nrow(df3))
+df3$V1 = as.integer(df3$V1)
 sapply(df3,class)
 
 5. Data Cleaning
@@ -58,6 +59,8 @@ df1_clean = na.omit(df1)
 rownames(df1_clean) = seq_len(nrow(df1_clean))
 
 ls(df1) # Same as colnames(df1)
+
+
 
 6. Preprocessing Data with Categorical Features
 library(caret)
