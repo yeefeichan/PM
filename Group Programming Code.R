@@ -49,7 +49,7 @@ table(df1$V15)
 df1$V2 = replace(df1$V2, df1$V2 == " ?", NA)
 df1$V7 = replace(df1$V7, df1$V7 == " ?", NA)
 df1$V14 = replace(df1$V14, df1$V14 == " ?", NA)
-# df1 = na.omit(df1)
+# df1_clean = na.omit(df1)
 
 ls(df1) # Same as colnames(df1)
 
