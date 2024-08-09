@@ -85,3 +85,6 @@ ls(df3) # Same as colnames(df3)
 library(caret)
 oneh = dummyVars( ~ ., data=df1_clean)
 final_df1_clean = data.frame(predict(oneh, newdata=df1_clean))
+
+oneh = dummyVars( ~ ., data=df3_clean)
+final_df3_clean = data.frame(predict(oneh, newdata=df3_clean))
