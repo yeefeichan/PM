@@ -46,6 +46,8 @@ table(df1$V15)
 
 # V2, V7, V14 has "?"
 
+df1$V2 = replace(df1$V2, df1$V2 == " ?", NA)
+df1$V7 = replace(df1$V7, df1$V7 == " ?", NA)
 df1$V14 = replace(df1$V14, df1$V14 == " ?", NA)
 # df1 = na.omit(df1)
 
