@@ -58,9 +58,28 @@ df1$V14 = replace(df1$V14, df1$V14 == " ?", NA) # https://www.digitalocean.com/c
 df1_clean = na.omit(df1)
 rownames(df1_clean) = seq_len(nrow(df1_clean))
 
-ls(df1) # Same as colnames(df1)
+ls(df1_clean) # Same as colnames(df1_clean)
 
+table(df3$V2)
+table(df3$V4)
+table(df3$V6)
+table(df3$V7)
+table(df3$V8)
+table(df3$V9)
+table(df3$V10)
+table(df3$V14)
+table(df3$V15)
 
+# V2, V7, V14 has "?"
+
+df3$V2 = replace(df3$V2, df3$V2 == " ?", NA)
+df3$V7 = replace(df3$V7, df3$V7 == " ?", NA)
+df3$V14 = replace(df3$V14, df3$V14 == " ?", NA) # https://www.digitalocean.com/community/tutorials/replace-in-r
+
+df3_clean = na.omit(df3)
+rownames(df3_clean) = seq_len(nrow(df3_clean))
+
+ls(df3) # Same as colnames(df3)
 
 6. Preprocessing Data with Categorical Features
 library(caret)
