@@ -48,8 +48,10 @@ table(df1$V15)
 
 df1$V2 = replace(df1$V2, df1$V2 == " ?", NA)
 df1$V7 = replace(df1$V7, df1$V7 == " ?", NA)
-df1$V14 = replace(df1$V14, df1$V14 == " ?", NA)
-# df1_clean = na.omit(df1)
+df1$V14 = replace(df1$V14, df1$V14 == " ?", NA) # https://www.digitalocean.com/community/tutorials/replace-in-r
+
+df1_clean = na.omit(df1)
+rownames(df1_clean) = seq_len(nrow(df1_clean))
 
 ls(df1) # Same as colnames(df1)
 
