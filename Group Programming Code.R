@@ -33,6 +33,10 @@ dim(df5)
 4. Data Preprocessing
 sapply(df1,class)
 
+df3 = df3[ -1,]
+rownames(df3) = seq_len(nrow(df3))
+sapply(df3,class)
+
 5. Data Cleaning
 table(df1$V2)
 table(df1$V4)
@@ -57,5 +61,5 @@ ls(df1) # Same as colnames(df1)
 
 6. Preprocessing Data with Categorical Features
 library(caret)
-oneh = dummyVars( ~ ., data=df1)
-final_df1 = data.frame(predict(oneh, newdata=df1))
+oneh = dummyVars( ~ ., data=df1_clean)
+final_df1_clean = data.frame(predict(oneh, newdata=df1_clean))
