@@ -83,11 +83,11 @@ ls(df3) # Same as colnames(df3)
 
 6. Preprocessing Data with Categorical Features
 library(caret)
-oneh = dummyVars( ~ ., data=df1_clean)
-final_df1_clean = data.frame(predict(oneh, newdata=df1_clean))
+oneh_df1 = dummyVars( ~ ., data=df1_clean)
+final_df1_clean = data.frame(predict(oneh_df1, newdata=df1_clean))
 
-oneh = dummyVars( ~ ., data=df3_clean)
-final_df3_clean = data.frame(predict(oneh, newdata=df3_clean))
+oneh_df3 = dummyVars( ~ ., data=df3_clean)
+final_df3_clean = data.frame(predict(oneh_df3, newdata=df3_clean))
 
 6. Preprocessing Data with Numerical Features
-# Normalisation # https://towardsdatascience.com/normalization-vs-standardization-explained-209e84d0f81e#:~:text=Well%2C%20that%20depends%20on%20the,nearest%20neighbor%20and%20neural%20networks.
+# https://towardsdatascience.com/normalization-vs-standardization-explained-209e84d0f81e#:~:text=Well%2C%20that%20depends%20on%20the,nearest%20neighbor%20and%20neural%20networks.
