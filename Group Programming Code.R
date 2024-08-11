@@ -91,3 +91,6 @@ final_df3_clean = data.frame(predict(oneh_df3, newdata=df3_clean))
 
 6. Preprocessing Data with Numerical Features
 # https://towardsdatascience.com/normalization-vs-standardization-explained-209e84d0f81e#:~:text=Well%2C%20that%20depends%20on%20the,nearest%20neighbor%20and%20neural%20networks.
+process = preProcess(final_df1_clean, method=c("range"))
+final_df1_clean = data.frame(predict(process, newdata=final_df1_clean))
+
