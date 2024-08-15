@@ -97,7 +97,33 @@ oneh_df3 = dummyVars( ~ ., data=df3_clean)
 final_df3_clean = data.frame(predict(oneh_df3, newdata=df3_clean))
 
 8.kNN
+i. Set train data and test data
 census.train=final_df1_clean
 census.test=final_df3_clean
+
+ii. Remove unsed columns and rename columns
+census.train.knn$V14.Holand.Netherlands<-NULL
+census.train.knn$V14..<-NULL
+names(census.test.knn)[names(census.test.knn) == "V15..50K."] <- "V15..50K"
+names(census.test.knn)[names(census.test.knn) == "V15...50K."] <- "V15...50K"
+
+iii. Convert into categorical data
+census.train.knn$V15...50K <- as.factor(census.train.knn$V15...50K)
+census.test.knn$V15...50K <- as.factor(census.test.knn$V15...50K)
+
+iv. Perform kNN
+library(kknn)
+cat("\nTraining and validation with wkNN ...\n\n")
+census.kknn=kknn(V15...50K ~ ., census.train.knn, census.test.knn, k = 1)
+
+v. Evaluating k-NN Model performance
+yhat.kknn=fitted(census.kknn)
+yhat.kknn=factor(yhat.kknn, levels = levels(census.test.knn$V15...50K))
+confusion_matrix=confusionMatrix(yhat.kknn, census.test.knn$V15...50K)
+print(confusion_matrix)
+
+
+
+
 
 
