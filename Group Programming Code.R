@@ -142,6 +142,34 @@ yhat.kknn=factor(yhat.kknn, levels = levels(census.test.knn$V15...50K))
 knn_confusion_matrix=confusionMatrix(yhat.kknn, census.test.knn$V15...50K)
 print(knn_confusion_matrix)
 
+# Evaluation for Binary Classification using formulas
+cftable.std = table(yhat.kknn, census.test.knn$V15...50K)
+
+ACR = sum(diag(cftable.std)) / sum(cftable.std)
+TPR = cftable.std[1,1] / sum(cftable.std[,1])
+TNR = cftable.std[2,2] / sum(cftable.std[,2])
+PPV = cftable.std[1,1] / sum(cftable.std[1,])
+NPV = cftable.std[2,2] / sum(cftable.std[2,])
+FPR = 1 - TNR
+FNR = 1 - TPR
+
+RandomAccuracy = (sum(cftable.std[,2]) * sum(cftable.std[2,]) + 
+	sum(cftable.std[,1]) * sum(cftable.std[1,])) / (sum(cftable.std)^2)
+
+Kappa = (ACR - RandomAccuracy) / (1 - RandomAccuracy)
+
+# Print the confusion matrix
+print(cftable.std)
+
+# Print the metrics
+cat("\n      Accuracy :", ACR, "\n")
+cat("\n         Kappa :", Kappa, "\n")
+cat("\n   Sensitivity :", TPR, "\n")
+cat("\n   Specificity :", TNR, "\n")
+cat("\nPos Pred Value :", PPV, "\n")
+cat("\nNeg Pred Value :", NPV, "\n")
+cat("\n           FPR :", FPR, "\n")
+cat("\n           FNR :", FNR, "\n")
 
 
 
