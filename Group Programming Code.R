@@ -102,14 +102,14 @@ census.train=final_df1_clean
 census.test=final_df3_clean
 
 ii. Remove unsed columns and rename columns
-census.train.knn$V14.Holand.Netherlands<-NULL
-census.train.knn$V14..<-NULL
-names(census.test.knn)[names(census.test.knn) == "V15..50K."] <- "V15..50K"
-names(census.test.knn)[names(census.test.knn) == "V15...50K."] <- "V15...50K"
+census.train.knn$V14.Holand.Netherlands=NULL
+census.train.knn$V14..=NULL
+names(census.test.knn)[names(census.test.knn) == "V15..50K."]="V15..50K"
+names(census.test.knn)[names(census.test.knn) == "V15...50K."]="V15...50K"
 
 iii. Convert into categorical data
-census.train.knn$V15...50K <- as.factor(census.train.knn$V15...50K)
-census.test.knn$V15...50K <- as.factor(census.test.knn$V15...50K)
+census.train.knn$V15...50K=as.factor(census.train.knn$V15...50K)
+census.test.knn$V15...50K=as.factor(census.test.knn$V15...50K)
 
 iv. Perform kNN
 library(kknn)
