@@ -142,6 +142,15 @@ yhat.kknn=factor(yhat.kknn, levels = levels(census.test.knn$V15...50K))
 knn_confusion_matrix=confusionMatrix(yhat.kknn, census.test.knn$V15...50K)
 print(knn_confusion_matrix)
 
+# AUROC for kNN
+library(pROC)
+yhat.prob=census.kknn$prob[,2]
+roc_curve=roc(census.test.knn$V15...50K,yhat.prob)
+plot(roc_curve,col="blue",main="ROC Curve for kNN Model")
+auc_value=auc(roc_curve)
+print(paste("AUC:",auc_value))
+
+????????????????????????????????????
 # Evaluation for Binary Classification using formulas
 cftable.std = table(yhat.kknn, census.test.knn$V15...50K)
 
@@ -170,6 +179,7 @@ cat("\nPos Pred Value :", PPV, "\n")
 cat("\nNeg Pred Value :", NPV, "\n")
 cat("\n           FPR :", FPR, "\n")
 cat("\n           FNR :", FNR, "\n")
+????????????????????????????????????
 
 
 
