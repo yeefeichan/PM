@@ -140,8 +140,8 @@ census.kknn=kknn(V15...50K ~ ., census.train.knn, census.test.knn, k = 1)
 # Evaluating k-NN Model performance
 yhat.kknn=fitted(census.kknn)
 yhat.kknn=factor(yhat.kknn, levels = levels(census.test.knn$V15...50K))
-confusion_matrix=confusionMatrix(yhat.kknn, census.test.knn$V15...50K)
-print(confusion_matrix)
+knn_confusion_matrix=confusionMatrix(yhat.kknn, census.test.knn$V15...50K)
+print(knn_confusion_matrix)
 
 
 
