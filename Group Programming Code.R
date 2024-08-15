@@ -49,7 +49,7 @@ table(df1$V15)
 
 df1$V2 = replace(df1$V2, df1$V2 == " ?", NA)
 df1$V7 = replace(df1$V7, df1$V7 == " ?", NA)
-df1$V14 = replace(df1$V14, df1$V14 == " ?", NA) # https://www.digitalocean.com/community/tutorials/replace-in-r
+df1$V14 = replace(df1$V14, df1$V14 == " ?", NA)
 
 df1_clean = na.omit(df1)
 rownames(df1_clean) = seq_len(nrow(df1_clean))
@@ -70,7 +70,7 @@ table(df3$V15)
 
 df3$V2 = replace(df3$V2, df3$V2 == " ?", NA)
 df3$V7 = replace(df3$V7, df3$V7 == " ?", NA)
-df3$V14 = replace(df3$V14, df3$V14 == " ?", NA) # https://www.digitalocean.com/community/tutorials/replace-in-r
+df3$V14 = replace(df3$V14, df3$V14 == " ?", NA)
 
 df3_clean = na.omit(df3)
 rownames(df3_clean) = seq_len(nrow(df3_clean))
@@ -78,7 +78,6 @@ rownames(df3_clean) = seq_len(nrow(df3_clean))
 ls(df3_clean) # Same as colnames(df3_clean)
 
 6. Preprocessing Data with Numerical Features
-# https://towardsdatascience.com/normalization-vs-standardization-explained-209e84d0f81e#:~:text=Well%2C%20that%20depends%20on%20the,nearest%20neighbor%20and%20neural%20networks.
 library(caret)
 process = preProcess(df1_clean, method=c("range"))
 df1_clean_normalisation = data.frame(predict(process, newdata=df1_clean))
