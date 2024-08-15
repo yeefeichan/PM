@@ -18,19 +18,14 @@ df3 = read.csv(unz("census+income.zip", "adult.test"), header=F)
 df4 = read.csv(unz("census+income.zip", "Index"))
 df5 = read.csv(unz("census+income.zip", "old.adult.names"), header=F)
 
-View(df1)
-View(df2)
-View(df3)
-View(df4)
-View(df5)
+View(df1) # df1 is training data
+View(df3) # df3 is training data
 
 dim(df1)
-dim(df2)
 dim(df3)
-dim(df4)
-dim(df5)
 
 4. Data Preprocessing
+
 sapply(df1,class)
 
 df3 = df3[ -1,]
@@ -39,6 +34,7 @@ df3$V1 = as.integer(df3$V1)
 sapply(df3,class)
 
 5. Data Cleaning
+
 table(df1$V2)
 table(df1$V4)
 table(df1$V6)
@@ -85,38 +81,63 @@ ls(df3_clean) # Same as colnames(df3_clean)
 # https://towardsdatascience.com/normalization-vs-standardization-explained-209e84d0f81e#:~:text=Well%2C%20that%20depends%20on%20the,nearest%20neighbor%20and%20neural%20networks.
 library(caret)
 process = preProcess(df1_clean, method=c("range"))
-df1_clean = data.frame(predict(process, newdata=df1_clean))
+df1_clean_normalisation = data.frame(predict(process, newdata=df1_clean))
 
-df3_clean = data.frame(predict(process, newdata=df3_clean))
+df3_clean_normalisation = data.frame(predict(process, newdata=df3_clean))
 
 7. Preprocessing Data with Categorical Features
-oneh_df1 = dummyVars( ~ ., data=df1_clean)
-final_df1_clean = data.frame(predict(oneh_df1, newdata=df1_clean))
 
-oneh_df3 = dummyVars( ~ ., data=df3_clean)
-final_df3_clean = data.frame(predict(oneh_df3, newdata=df3_clean))
+oneh_df1 = dummyVars( ~ ., data=df1_clean_normalisation)
+final_df1_clean = data.frame(predict(oneh_df1, newdata=df1_clean_normalisation))
 
-8.kNN
-i. Set train data and test data
+oneh_df3 = dummyVars( ~ ., data=df3_clean_normalisation)
+final_df3_clean = data.frame(predict(oneh_df3, newdata=df3_clean_normalisation))
+
+8. EDA: Numeric Univariate Analysis
+
+df1_clean$V2 = as.numeric(factor(df1_clean$V2))
+df1_clean$V4 = as.numeric(factor(df1_clean$V4))
+df1_clean$V6 = as.numeric(factor(df1_clean$V6))
+df1_clean$V7 = as.numeric(factor(df1_clean$V7))
+df1_clean$V8 = as.numeric(factor(df1_clean$V8))
+df1_clean$V9 = as.numeric(factor(df1_clean$V9))
+df1_clean$V10 = as.numeric(factor(df1_clean$V10))
+df1_clean$V14 = as.numeric(factor(df1_clean$V14))
+df1_clean$V15 = as.numeric(factor(df1_clean$V15))
+
+colMeans(df1_clean)
+apply(df1_clean, 2, var)
+apply(df1_clean, 2, sd)
+
+par(mfrow=c(3,5))
+cn = names(df1_clean)
+for (i in 1:15) { hist(df1_clean[,i],col="purple",xlab="",main=cn[i]) }
+
+9. EDA: Numeric Bivariate Analysis
+par(mfrow=c(3,4))
+plot(df1_clean) # scatter plot
+
+10.kNN
+# Set train data and test data
 census.train=final_df1_clean
 census.test=final_df3_clean
 
-ii. Remove unsed columns and rename columns
+# Remove unused columns and rename columns
 census.train.knn$V14.Holand.Netherlands=NULL
 census.train.knn$V14..=NULL
 names(census.test.knn)[names(census.test.knn) == "V15..50K."]="V15..50K"
 names(census.test.knn)[names(census.test.knn) == "V15...50K."]="V15...50K"
 
-iii. Convert into categorical data
+# Convert into categorical data
 census.train.knn$V15...50K=as.factor(census.train.knn$V15...50K)
 census.test.knn$V15...50K=as.factor(census.test.knn$V15...50K)
 
-iv. Perform kNN
+# Perform kNN
 library(kknn)
 cat("\nTraining and validation with wkNN ...\n\n")
 census.kknn=kknn(V15...50K ~ ., census.train.knn, census.test.knn, k = 1)
 
-v. Evaluating k-NN Model performance
+# Evaluating k-NN Model performance
 yhat.kknn=fitted(census.kknn)
 yhat.kknn=factor(yhat.kknn, levels = levels(census.test.knn$V15...50K))
 confusion_matrix=confusionMatrix(yhat.kknn, census.test.knn$V15...50K)
