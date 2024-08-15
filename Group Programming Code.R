@@ -95,3 +95,9 @@ final_df1_clean = data.frame(predict(oneh_df1, newdata=df1_clean))
 
 oneh_df3 = dummyVars( ~ ., data=df3_clean)
 final_df3_clean = data.frame(predict(oneh_df3, newdata=df3_clean))
+
+8.kNN
+split = sample.split(final_df1_clean$V15...50K, SplitRatio=0.7)
+census.train=final_df1_clean[split,]
+census.test=final_df1_clean[!split,]
+
