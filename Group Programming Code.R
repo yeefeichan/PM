@@ -119,8 +119,8 @@ plot(df1_clean) # scatter plot
 
 10.kNN
 # Set train data and test data
-census.train=final_df1_clean
-census.test=final_df3_clean
+census.train.knn=final_df1_clean
+census.test.knn=final_df3_clean
 
 # Remove unused columns and rename columns
 census.train.knn$V14.Holand.Netherlands=NULL
