@@ -179,6 +179,38 @@ cat("\nNeg Pred Value :", NPV, "\n")
 cat("\n           FPR :", FPR, "\n")
 cat("\n           FNR :", FNR, "\n")
 
+11.Decision Tree
+# Set train data and test data
+census.train=df1_clean
+census.test=df3_clean
+
+# Add new column "Income"("Income"="Yes" if "V15" =">50K" and "No" if "V15" not equal ">50K") for both census.train and census.test while remove column "V15" in both census.train and census.test
+census.test$V15=trimws(as.character(census.test$V15))
+census.test$Income=factor(ifelse(census.test$V15 == ">50K.", "Yes", "No"))
+census.test$V15=NULL
+census.train$V15=trimws(as.character(census.train$V15))
+census.train$Income=factor(ifelse(census.train$V15 == ">50K", "Yes", "No"))
+census.train$V15=NULL
+
+# Perform Decision Tree Model
+library(rpart)
+library(rpart.plot)
+rpart.census=rpart(Income~.,census.train)
+rpart.plot(rpart.census)
+
+# Evaluate Decision Tree Model performance
+census.pred=predict(rpart.census, census.test, type = "class")
+confusionMatrix(census.pred, census.test$Income)
+
+# AUROC for Decision Tree Model
+library(pROC)
+census.probs=predict(rpart.census, census.test, type = "prob")
+roc_curve <- roc(census.test$Income, census.probs[, 2])
+plot(roc_curve)
+auc(roc_curve)
+
+
+
 
 
 
