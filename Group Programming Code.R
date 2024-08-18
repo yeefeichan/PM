@@ -145,10 +145,10 @@ print(knn_confusion_matrix)
 # AUROC for kNN
 library(pROC)
 yhat.prob=census.kknn$prob[,2]
-roc_curve=roc(census.test.knn$V15...50K,yhat.prob)
-plot(roc_curve,col="blue",main="ROC Curve for kNN Model")
-auc_value=auc(roc_curve)
-print(paste("AUC:",auc_value))
+roc_curve_knn=roc(census.test.knn$V15...50K,yhat.prob)
+plot(roc_curve_knn,col="blue",main="ROC Curve for kNN Model")
+auc_value=auc(roc_curve_knn)
+print(paste("AUC:",auc_value_knn))
 
 # Evaluation for Binary Classification using formulas
 cftable.std = table(yhat.kknn, census.test.knn$V15...50K)
@@ -205,6 +205,6 @@ confusionMatrix(census.pred, census.test$Income)
 # AUROC for Decision Tree Model
 library(pROC)
 census.probs=predict(rpart.census, census.test, type = "prob")
-roc_curve <- roc(census.test$Income, census.probs[, 2])
-plot(roc_curve)
-auc(roc_curve)
+roc_curve_dt=roc(census.test$Income, census.probs[, 2])
+plot(roc_curve_dt)
+auc(roc_curve_dt)
