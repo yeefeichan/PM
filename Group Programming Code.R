@@ -148,7 +148,7 @@ yhat.prob=census.kknn$prob[,2]
 roc_curve_knn=roc(census.test.knn$V15...50K,yhat.prob)
 plot(roc_curve_knn,col="blue",main="ROC Curve for kNN Model")
 auc_value=auc(roc_curve_knn)
-print(paste("AUC:",auc_value_knn))
+print(paste("AUC:",auc_value))
 
 # Evaluation for Binary Classification using formulas
 cftable.std = table(yhat.kknn, census.test.knn$V15...50K)
