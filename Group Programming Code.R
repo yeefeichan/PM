@@ -6,7 +6,7 @@ Group Assignment
 # https://archive.ics.uci.edu/dataset/20/census+income
 
 2. Set the working directory to the path that contains "census+income.zip"
-# setwd("C:\\Users\\yeefe\\OneDrive\\Desktop\\Predictive Modelling\\Assignment")
+# setwd("C:\\Users\\yeefei\\OneDrive\\Desktop\\Predictive Modelling\\Assignment")
 
 3. Extract the data
 
@@ -19,7 +19,7 @@ df4 = read.csv(unz("census+income.zip", "Index"))
 df5 = read.csv(unz("census+income.zip", "old.adult.names"), header=F)
 
 View(df1) # df1 is training data
-View(df3) # df3 is training data
+View(df3) # df3 is testing data
 
 dim(df1)
 dim(df3)
@@ -72,6 +72,8 @@ df3$V2 = replace(df3$V2, df3$V2 == " ?", NA)
 df3$V7 = replace(df3$V7, df3$V7 == " ?", NA)
 df3$V14 = replace(df3$V14, df3$V14 == " ?", NA)
 
+df3$V15 = sub("\\..*","",df3$V15)
+
 df3_clean = na.omit(df3)
 rownames(df3_clean) = seq_len(nrow(df3_clean))
 
@@ -121,11 +123,9 @@ plot(df1_clean) # scatter plot
 census.train.knn=final_df1_clean
 census.test.knn=final_df3_clean
 
-# Remove unused columns and rename columns
+# Remove unused columns
 census.train.knn$V14.Holand.Netherlands=NULL
 census.train.knn$V14..=NULL
-names(census.test.knn)[names(census.test.knn) == "V15..50K."]="V15..50K"
-names(census.test.knn)[names(census.test.knn) == "V15...50K."]="V15...50K"
 
 # Convert into categorical data
 census.train.knn$V15...50K=as.factor(census.train.knn$V15...50K)
