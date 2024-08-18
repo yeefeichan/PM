@@ -118,7 +118,9 @@ for (i in 1:15) { hist(df1_clean[,i],col="purple",xlab="",main=cn[i]) }
 par(mfrow=c(3,4))
 plot(df1_clean) # scatter plot
 
-10. kNN
+10. PCA
+
+11. kNN
 # Set train data and test data
 census.train.knn=final_df1_clean
 census.test.knn=final_df3_clean
@@ -179,14 +181,14 @@ cat("\nNeg Pred Value :", NPV, "\n")
 cat("\n           FPR :", FPR, "\n")
 cat("\n           FNR :", FNR, "\n")
 
-11. Decision Tree
+12. Decision Tree
 # Set train data and test data
 census.train=df1_clean
 census.test=df3_clean
 
 # Add new column "Income"("Income"="Yes" if "V15" =">50K" and "No" if "V15" not equal ">50K") for both census.train and census.test while remove column "V15" in both census.train and census.test
 census.test$V15=trimws(as.character(census.test$V15))
-census.test$Income=factor(ifelse(census.test$V15 == ">50K.", "Yes", "No"))
+census.test$Income=factor(ifelse(census.test$V15 == ">50K", "Yes", "No"))
 census.test$V15=NULL
 census.train$V15=trimws(as.character(census.train$V15))
 census.train$Income=factor(ifelse(census.train$V15 == ">50K", "Yes", "No"))
