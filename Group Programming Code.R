@@ -110,7 +110,7 @@ df_clean$V14 = as.numeric(factor(df_clean$V14))
 df_clean$V15 = as.numeric(factor(df_clean$V15))
 df_clean$V15 = df_clean$V15 - 1
 
-colMeans(df1_clean)
+colMeans(df_clean)
 apply(df_clean, 2, var)
 apply(df_clean, 2, sd)
 
