@@ -208,11 +208,3 @@ census.probs=predict(rpart.census, census.test, type = "prob")
 roc_curve <- roc(census.test$Income, census.probs[, 2])
 plot(roc_curve)
 auc(roc_curve)
-
-
-
-
-
-
-
-
