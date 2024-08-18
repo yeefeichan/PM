@@ -18,6 +18,8 @@ df3 = read.csv(unz("census+income.zip", "adult.test"), header=F)
 df4 = read.csv(unz("census+income.zip", "Index"))
 df5 = read.csv(unz("census+income.zip", "old.adult.names"), header=F)
 
+df3$V15 = gsub("\\.","",df3$V15)
+
 View(df1) # df1 is training data
 View(df3) # df3 is testing data
 
@@ -96,27 +98,33 @@ final_df3_clean = data.frame(predict(oneh_df3, newdata=df3_clean_normalisation))
 
 8. EDA: Numeric Univariate Analysis
 
-df1_clean$V2 = as.numeric(factor(df1_clean$V2))
-df1_clean$V4 = as.numeric(factor(df1_clean$V4))
-df1_clean$V6 = as.numeric(factor(df1_clean$V6))
-df1_clean$V7 = as.numeric(factor(df1_clean$V7))
-df1_clean$V8 = as.numeric(factor(df1_clean$V8))
-df1_clean$V9 = as.numeric(factor(df1_clean$V9))
-df1_clean$V10 = as.numeric(factor(df1_clean$V10))
-df1_clean$V14 = as.numeric(factor(df1_clean$V14))
-df1_clean$V15 = as.numeric(factor(df1_clean$V15))
+df_clean = rbind(df1_clean,df3_clean)
+df_clean$V2 = as.numeric(factor(df_clean$V2))
+df_clean$V4 = as.numeric(factor(df_clean$V4))
+df_clean$V6 = as.numeric(factor(df_clean$V6))
+df_clean$V7 = as.numeric(factor(df_clean$V7))
+df_clean$V8 = as.numeric(factor(df_clean$V8))
+df_clean$V9 = as.numeric(factor(df_clean$V9))
+df_clean$V10 = as.numeric(factor(df_clean$V10))
+df_clean$V14 = as.numeric(factor(df_clean$V14))
+df_clean$V15 = as.numeric(factor(df_clean$V15))
+df_clean$V15 = df_clean$V15 - 1
 
 colMeans(df1_clean)
-apply(df1_clean, 2, var)
-apply(df1_clean, 2, sd)
+apply(df_clean, 2, var)
+apply(df_clean, 2, sd)
 
 par(mfrow=c(3,5))
-cn = names(df1_clean)
-for (i in 1:15) { hist(df1_clean[,i],col="purple",xlab="",main=cn[i]) }
+cn = names(df_clean)
+for (i in 1:15) { hist(df_clean[,i],col=rainbow(length(df_clean)),xlab="",main=cn[i]) }
 
 9. EDA: Numeric Bivariate Analysis
 par(mfrow=c(3,4))
-plot(df1_clean) # scatter plot
+plot(df_clean) # scatter plot
+
+library(corrplot)
+cor_matrix=cor(df_clean[, sapply(df_clean, is.numeric)])
+corrplot(cor_matrix, method="circle")
 
 10. PCA
 
