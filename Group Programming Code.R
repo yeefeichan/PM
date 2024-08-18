@@ -118,7 +118,7 @@ for (i in 1:15) { hist(df1_clean[,i],col="purple",xlab="",main=cn[i]) }
 par(mfrow=c(3,4))
 plot(df1_clean) # scatter plot
 
-10.kNN
+10. kNN
 # Set train data and test data
 census.train.knn=final_df1_clean
 census.test.knn=final_df3_clean
@@ -179,7 +179,7 @@ cat("\nNeg Pred Value :", NPV, "\n")
 cat("\n           FPR :", FPR, "\n")
 cat("\n           FNR :", FNR, "\n")
 
-11.Decision Tree
+11. Decision Tree
 # Set train data and test data
 census.train=df1_clean
 census.test=df3_clean
