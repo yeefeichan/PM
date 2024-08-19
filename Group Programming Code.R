@@ -6,7 +6,7 @@ Group Assignment
 # https://archive.ics.uci.edu/dataset/20/census+income
 
 2. Set the working directory to the path that contains "census+income.zip"
-# setwd("C:\\Users\\yeefei\\OneDrive\\Desktop\\Predictive Modelling\\Assignment")
+# setwd("C:\\Users\\yeefe\\OneDrive\\Desktop\\Predictive Modelling\\Assignment")
 
 3. Extract the data
 
@@ -18,7 +18,7 @@ df3 = read.csv(unz("census+income.zip", "adult.test"), header=F)
 df4 = read.csv(unz("census+income.zip", "Index"))
 df5 = read.csv(unz("census+income.zip", "old.adult.names"), header=F)
 
-df3$V15 = gsub("\\.","",df3$V15)
+df3$V15 = gsub("\\.","",df3$V15) #gsub???
 
 View(df1) # df1 is training data
 View(df3) # df3 is testing data
@@ -74,8 +74,6 @@ df3$V2 = replace(df3$V2, df3$V2 == " ?", NA)
 df3$V7 = replace(df3$V7, df3$V7 == " ?", NA)
 df3$V14 = replace(df3$V14, df3$V14 == " ?", NA)
 
-df3$V15 = sub("\\..*","",df3$V15)
-
 df3_clean = na.omit(df3)
 rownames(df3_clean) = seq_len(nrow(df3_clean))
 
@@ -83,8 +81,8 @@ ls(df3_clean) # Same as colnames(df3_clean)
 
 6. Preprocessing Data with Numerical Features
 library(caret)
-process = preProcess(df1_clean, method=c("range"))
-df1_clean_normalisation = data.frame(predict(process, newdata=df1_clean))
+process = preProcess(df1_clean, method=c("range")) #preProcess???
+df1_clean_normalisation = data.frame(predict(process, newdata=df1_clean)) #predict???
 
 df3_clean_normalisation = data.frame(predict(process, newdata=df3_clean))
 
@@ -114,17 +112,20 @@ colMeans(df_clean)
 apply(df_clean, 2, var)
 apply(df_clean, 2, sd)
 
+# Data Visualisation => Histograms
 par(mfrow=c(3,5))
 cn = names(df_clean)
 for (i in 1:15) { hist(df_clean[,i],col=rainbow(length(df_clean)),xlab="",main=cn[i]) }
 
 9. EDA: Numeric Bivariate Analysis
-par(mfrow=c(3,4))
-plot(df_clean) # scatter plot
 
-library(corrplot)
+library(corrplot) #corrplot???
 cor_matrix=cor(df_clean[, sapply(df_clean, is.numeric)])
 corrplot(cor_matrix, method="circle")
+
+# Data Visualisation => Scatter Plot
+par(mfrow=c(3,4))
+plot(df_clean)
 
 10. PCA
 
