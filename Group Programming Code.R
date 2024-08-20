@@ -18,8 +18,6 @@ df3 = read.csv(unz("census+income.zip", "adult.test"), header=F)
 df4 = read.csv(unz("census+income.zip", "Index"))
 df5 = read.csv(unz("census+income.zip", "old.adult.names"), header=F)
 
-df3$V15 = gsub("\\.","",df3$V15) #gsub???
-
 View(df1) # df1 is training data
 View(df3) # df3 is testing data
 
@@ -73,6 +71,8 @@ table(df3$V15)
 df3$V2 = replace(df3$V2, df3$V2 == " ?", NA)
 df3$V7 = replace(df3$V7, df3$V7 == " ?", NA)
 df3$V14 = replace(df3$V14, df3$V14 == " ?", NA)
+
+df3$V15 = gsub("\\.","",df3$V15)
 
 df3_clean = na.omit(df3)
 rownames(df3_clean) = seq_len(nrow(df3_clean))
