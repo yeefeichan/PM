@@ -128,8 +128,23 @@ par(mfrow=c(3,4))
 plot(df_clean)
 
 10. PCA
+df_clean_scale = scale(df_clean, scale=TRUE)
+PCA = prcomp(df_clean_scale)
+print(PCA)
+print(summary(PCA))
+biplot(PCA)
 
-11. kNN
+11. k-Means Clustering
+par(mfrow=c(1,2))
+set.seed(123)
+kmc=kmeans(df_clean_scale,2,nstart=500)
+kmc$cluster
+
+library(cluster)
+clusplot(df_clean_scale, kmc$cluster, main=paste0("k-Means Clustering (K=2, seed=",123,")"), 
+  xlab="x", ylab="y", cex=2)
+
+12. kNN
 # Set train data and test data
 census.train.knn=final_df1_clean
 census.test.knn=final_df3_clean
@@ -190,7 +205,7 @@ cat("\nNeg Pred Value :", NPV, "\n")
 cat("\n           FPR :", FPR, "\n")
 cat("\n           FNR :", FNR, "\n")
 
-12. Decision Tree
+13. Decision Tree
 # Set train data and test data
 census.train=df1_clean
 census.test=df3_clean
