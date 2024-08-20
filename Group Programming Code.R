@@ -205,7 +205,57 @@ cat("\nNeg Pred Value :", NPV, "\n")
 cat("\n           FPR :", FPR, "\n")
 cat("\n           FNR :", FNR, "\n")
 
-13. Decision Tree
+13. Logistic Regression
+
+14. Naive Bayes
+
+library(naivebayes)
+
+# Set train data and test data
+census.train.nb = final_df1_clean
+census.test.nb = final_df3_clean
+
+# Remove unwanted columns
+census.train.nb$V14.Holand.Netherlands = NULL
+census.train.nb$V14.. = NULL
+
+# Convert into categorical data
+census.train.nb$V15...50K = as.factor(census.train.nb$V15...50K)
+census.test.nb$V15...50K = as.factor(census.test.nb$V15...50K)
+
+# Training and validation with Naive Bayes with Laplace smoothing
+cat("\nTraining and validation with Naive Bayes ...\n\n")
+model.nb = naive_bayes(V15...50K ~ ., data = census.train.nb, laplace = 1)
+
+# Get predictions
+pred.nb = predict(model.nb, census.test.nb)
+nb_confusion_matrix=confusionMatrix(pred.nb, census.test.nb$V15...50K)
+print(nb_confusion_matrix)
+
+# Evaluation for Binary Classification using formulas (performance?)
+cfmat = table(pred.nb, census.test.nb$V15...50K)
+ACR = sum(diag(cfmat)) / sum(cfmat)
+TPR = cfmat[1,1] / sum(cfmat[,1])
+TNR = cfmat[2,2] / sum(cfmat[,2])
+PPV = cfmat[1,1] / sum(cfmat[1,])
+NPV = cfmat[2,2] / sum(cfmat[2,])
+FPR = 1 - TNR
+FNR = 1 - TPR
+RandomAccuracy = (sum(cfmat[,2]) * sum(cfmat[2,]) + 
+                  sum(cfmat[,1]) * sum(cfmat[1,])) / (sum(cfmat)^2)
+Kappa = (ACR - RandomAccuracy) / (1 - RandomAccuracy)
+
+print(cfmat)
+cat("\n      Accuracy :", ACR, "\n")
+cat("\n         Kappa :", Kappa, "\n")
+cat("\n   Sensitivity :", TPR, "\n")
+cat("\n   Specificity :", TNR, "\n")
+cat("\nPos Pred Value :", PPV, "\n")
+cat("\nNeg Pred Value :", NPV, "\n")
+cat("\n           FPR :", FPR, "\n")
+cat("\n           FNR :", FNR, "\n")
+
+15. Decision Tree
 # Set train data and test data
 census.train=df1_clean
 census.test=df3_clean
