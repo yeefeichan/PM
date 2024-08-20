@@ -72,7 +72,7 @@ df3$V2 = replace(df3$V2, df3$V2 == " ?", NA)
 df3$V7 = replace(df3$V7, df3$V7 == " ?", NA)
 df3$V14 = replace(df3$V14, df3$V14 == " ?", NA)
 
-df3$V15 = gsub("\\.","",df3$V15) #gsub???
+df3$V15 = gsub("\\.","",df3$V15) #gsub??? @eddieeeeee
 
 df3_clean = na.omit(df3)
 rownames(df3_clean) = seq_len(nrow(df3_clean))
@@ -81,8 +81,8 @@ ls(df3_clean) # Same as colnames(df3_clean)
 
 6. Preprocessing Data with Numerical Features
 library(caret)
-process = preProcess(df1_clean, method=c("range")) #preProcess???
-df1_clean_normalisation = data.frame(predict(process, newdata=df1_clean)) #predict???
+process = preProcess(df1_clean, method=c("range"))
+df1_clean_normalisation = data.frame(predict(process, newdata=df1_clean))
 
 df3_clean_normalisation = data.frame(predict(process, newdata=df3_clean))
 
