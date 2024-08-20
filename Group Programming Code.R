@@ -119,7 +119,7 @@ for (i in 1:15) { hist(df_clean[,i],col=rainbow(length(df_clean)),xlab="",main=c
 
 9. EDA: Numeric Bivariate Analysis
 
-library(corrplot) #corrplot???
+library(corrplot)
 cor_matrix=cor(df_clean[, sapply(df_clean, is.numeric)])
 corrplot(cor_matrix, method="circle")
 
