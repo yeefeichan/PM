@@ -206,6 +206,111 @@ cat("\n           FPR :", FPR, "\n")
 cat("\n           FNR :", FNR, "\n")
 
 13. Logistic Regression
+#performance()
+performance = function(xtab, desc=""){
+    cat("\n", desc,"\n", sep="")
+    print(xtab)
+
+    ACR = sum(diag(xtab))/sum(xtab)
+    CI  = binom.test(sum(diag(xtab)), sum(xtab))$conf.int
+    cat("\n        Accuracy :", ACR)
+    cat("\n          95% CI : (", CI[1], ",", CI[2], ")\n")
+
+    if(nrow(xtab)>2){
+        # e1071's classAgreement() in matchClasses.R
+        # Ref: https://stats.stackexchange.com/questions/586342/measures-to-compare-classification-partitions
+        n  = sum(xtab)
+        ni = apply(xtab, 1, sum)
+        nj = apply(xtab, 2, sum)
+        p0 = sum(diag(xtab))/n
+        pc = sum(ni * nj)/n^2
+        Kappa = (p0 - pc)/(1 - pc)
+        cat("\n           Kappa :", Kappa, "\n")
+        cat("\nStatistics by Class:\n")
+        # Levels of the actual data
+        lvls = dimnames(xtab)[[2]]
+        sensitivity = c()
+        specificity = c()
+        ppv         = c()
+        npv         = c()
+        for(i in 1:length(lvls)) {
+            sensitivity[i] = xtab[i,i]/sum(xtab[,i])
+            specificity[i] = sum(xtab[-i,-i])/sum(xtab[,-i])
+            ppv[i]         = xtab[i,i]/sum(xtab[i,])
+            npv[i]         = sum(xtab[-i,-i])/sum(xtab[-i,])
+        }
+        b = data.frame(rbind(sensitivity,specificity,ppv,npv))
+        names(b) = lvls
+        print(b)
+    } else {
+         #names(dimnames(xtab)) = c("Prediction", "Actual")
+         TPR = xtab[1,1]/sum(xtab[,1]); TNR = xtab[2,2]/sum(xtab[,2])
+         PPV = xtab[1,1]/sum(xtab[1,]); NPV = xtab[2,2]/sum(xtab[2,])
+         FPR = 1 - TNR                ; FNR = 1 - TPR
+         # https://standardwisdom.com/softwarejournal/2011/12/confusion-matrix-another-single-value-metric-kappa-statistic/
+         RandomAccuracy = (sum(xtab[,2])*sum(xtab[2,]) + 
+           sum(xtab[,1])*sum(xtab[1,]))/(sum(xtab)^2)
+         Kappa = (ACR - RandomAccuracy)/(1 - RandomAccuracy)
+         cat("\n           Kappa :", Kappa, "\n")
+         cat("\n     Sensitivity :", TPR)
+         cat("\n     Specificity :", TNR)
+         cat("\n  Pos Pred Value :", PPV)
+         cat("\n  Neg Pred Value :", NPV)
+         cat("\n             FPR :", FPR)
+         cat("\n             FNR :", FNR, "\n")
+         cat("\n'Positive' Class :", dimnames(xtab)[[1]][1], "\n")
+    }
+}
+
+# Set train data and test data
+census.train.logreg = final_df1_clean
+census.test.logreg = final_df3_clean
+V15.test = census.test.logreg$V15
+
+# Preprocess train data
+census.train.logreg$V15..50K = trimws(as.character(census.train.logreg$V15..50K))
+census.train.logreg$Income = factor(ifelse(census.train.logreg$V15..50K == ">50K", "Yes", "No"))
+census.train.logreg$V15..50K = NULL 
+
+# Preprocess test data
+census.test.logreg$V15..50K = trimws(as.character(census.test.logreg$V15..50K))
+census.test.logreg$Income = factor(ifelse(census.test.logreg$V15..50K == ">50K.", "Yes", "No"))
+census.test.logreg$V15..50K = NULL
+
+# Fit logistic regression model on training data
+logreg.fits = glm(Income ~ V1+V2.Federal.gov+V2.Local.gov+V2.Private+V2.Self.emp.inc
+			+V2.Self.emp.not.inc+V2.State.gov+V2.Without.pay+V3+V4.10th+V4.11th
+			+V4.12th+V4.1st.4th+V4.5th.6th+V4.7th.8th+V4.9th+V4.Assoc.acdm
+			+V4.Assoc.voc+V4.Bachelors+V4.Doctorate+V4.HS.grad+V4.Masters
+			+V4.Preschool+V4.Prof.school+V4.Some.college+V5+V6.Divorced
+			+V6.Married.AF.spouse+V6.Married.civ.spouse+V6.Married.spouse.absent
+			+V6.Never.married+V6.Separated+V6.Widowed+V7.Adm.clerical
+			+V7.Armed.Forces+V7.Craft.repair+V7.Exec.managerial+V7.Farming.fishing
+			+V7.Handlers.cleaners+V7.Machine.op.inspct+V7.Other.service
+			+V7.Priv.house.serv+V7.Prof.specialty+V7.Protective.serv+V7.Sales
+			+V7.Tech.support+V7.Transport.moving+V8.Husband+V8.Not.in.family
+			+V8.Other.relative+V8.Own.child+V8.Unmarried+V8.Wife+V9.Amer.Indian.Eskimo
+			+V9.Asian.Pac.Islander+V9.Black+V9.Other+V9.White+V10.Female+V10.Male
+			+V11+V12+V13+V14.Cambodia+V14.Canada+V14.China+V14.Columbia+V14.Cuba
+			+V14.Dominican.Republic+V14.Ecuador+V14.El.Salvador+V14.England
+			+V14.France+V14.Germany+V14.Greece+V14.Guatemala+V14.Haiti+V14.Honduras
+			+V14.Hong+V14.Hungary+V14.India+V14.Iran+V14.Ireland+V14.Italy+V14.Jamaica
+			+V14.Japan+V14.Laos+V14.Mexico+V14.Nicaragua+V14.Outlying.US.Guam.USVI.etc.
+			+V14.Peru+V14.Philippines+V14.Poland+V14.Portugal+V14.Puerto.Rico
+			+V14.Scotland+V14.South+V14.Taiwan+V14.Thailand+V14.Trinadad.Tobago
+			+V14.United.States+V14.Vietnam+V14.Yugoslavia+V15...50K ,
+                  data = census.train.logreg, family = binomial)
+
+# Predict probabilities on test data
+logreg.probs = predict(logreg.fits, newdata = census.test.logreg, type = "response")
+
+# Convert probabilities to class predictions
+logreg.predictions = ifelse(logreg.probs > 0.5, "Yes", "No")
+logreg.predictions = factor(logreg.predictions, levels = c("No", "Yes"))
+
+# Evaluate the model
+cfmat = table(logreg.predictions, V15.test)
+performance(cfmat, "Performance of Logistic Regression Model on Census Income")
 
 14. Naive Bayes
 
