@@ -132,7 +132,17 @@ df_clean_scale = scale(df_clean, scale=TRUE)
 PCA = prcomp(df_clean_scale)
 print(PCA)
 print(summary(PCA))
-biplot(PCA)
+plot(PCA)
+
+pr.var=PCA$sdev^2
+pve=pr.var/sum(pr.var)
+
+par(mfrow=c(1,2))
+plot(pr.var, xlab = 'i', ylab = expression(paste(lambda,'_i',sep='')), main = 'Scree Graph')
+plot(pve, ylim=c(0,1), type='b', xlab="Principal Component",
+  ylab="Proportion of Variance Explained")
+lines(cumsum(pve), ylim=c(0,1), type='b', xlab="Principal Component",
+  ylab="Cumulative Proportion of Variance Explained")
 
 11. k-Means Clustering
 set.seed(123)
