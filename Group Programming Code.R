@@ -119,7 +119,7 @@ for (i in 1:15) { hist(df_clean[,i],col=rainbow(length(df_clean)),xlab="",main=c
 
 9. EDA: Numeric Bivariate Analysis
 
-library(corrplot)
+library(corrplot) #Or ggplot?
 cor_matrix=cor(df_clean[, sapply(df_clean, is.numeric)])
 corrplot(cor_matrix, method="circle")
 
@@ -135,12 +135,11 @@ print(summary(PCA))
 biplot(PCA)
 
 11. k-Means Clustering
-par(mfrow=c(1,2))
 set.seed(123)
 kmc=kmeans(df_clean_scale,2,nstart=500)
-kmc$cluster
+kmc
 
-library(cluster)
+library(cluster) 
 clusplot(df_clean_scale, kmc$cluster, main=paste0("k-Means Clustering (K=2, seed=",123,")"), 
   xlab="x", ylab="y", cex=2)
 
@@ -154,56 +153,26 @@ census.train.knn$V14.Holand.Netherlands=NULL
 census.train.knn$V14..=NULL
 
 # Convert into categorical data
-census.train.knn$V15...50K=as.factor(census.train.knn$V15...50K)
-census.test.knn$V15...50K=as.factor(census.test.knn$V15...50K)
+census.train.knn$V15..50K=as.factor(census.train.knn$V15..50K)
+census.test.knn$V15..50K=as.factor(census.test.knn$V15..50K)
 
-# Perform kNN
+# Perform kNN 
 library(kknn)
 cat("\nTraining and validation with wkNN ...\n\n")
-census.kknn=kknn(V15...50K ~ ., census.train.knn, census.test.knn, k = 1)
+census.kknn=kknn(V15..50K ~ ., census.train.knn, census.test.knn, k = 1)
 
 # Evaluating k-NN Model performance
 yhat.kknn=fitted(census.kknn)
-yhat.kknn=factor(yhat.kknn, levels = levels(census.test.knn$V15...50K))
-knn_confusion_matrix=confusionMatrix(yhat.kknn, census.test.knn$V15...50K)
+yhat.kknn=factor(yhat.kknn, levels = levels(census.test.knn$V15..50K))
+knn_confusion_matrix=confusionMatrix(yhat.kknn, census.test.knn$V15..50K)
 print(knn_confusion_matrix)
 
 # AUROC for kNN
 library(pROC)
 yhat.prob=census.kknn$prob[,2]
-roc_curve_knn=roc(census.test.knn$V15...50K,yhat.prob)
+roc_curve_knn=roc(census.test.knn$V15..50K,yhat.prob)
 plot(roc_curve_knn,col="blue",main="ROC Curve for kNN Model")
-auc_value=auc(roc_curve_knn)
-print(paste("AUC:",auc_value))
-
-# Evaluation for Binary Classification using formulas
-cftable.std = table(yhat.kknn, census.test.knn$V15...50K)
-
-ACR = sum(diag(cftable.std)) / sum(cftable.std)
-TPR = cftable.std[1,1] / sum(cftable.std[,1])
-TNR = cftable.std[2,2] / sum(cftable.std[,2])
-PPV = cftable.std[1,1] / sum(cftable.std[1,])
-NPV = cftable.std[2,2] / sum(cftable.std[2,])
-FPR = 1 - TNR
-FNR = 1 - TPR
-
-RandomAccuracy = (sum(cftable.std[,2]) * sum(cftable.std[2,]) + 
-	sum(cftable.std[,1]) * sum(cftable.std[1,])) / (sum(cftable.std)^2)
-
-Kappa = (ACR - RandomAccuracy) / (1 - RandomAccuracy)
-
-# Print the confusion matrix
-print(cftable.std)
-
-# Print the metrics
-cat("\n      Accuracy :", ACR, "\n")
-cat("\n         Kappa :", Kappa, "\n")
-cat("\n   Sensitivity :", TPR, "\n")
-cat("\n   Specificity :", TNR, "\n")
-cat("\nPos Pred Value :", PPV, "\n")
-cat("\nNeg Pred Value :", NPV, "\n")
-cat("\n           FPR :", FPR, "\n")
-cat("\n           FNR :", FNR, "\n")
+auc(roc_curve_knn)
 
 13. Logistic Regression
 #performance()
@@ -265,7 +234,7 @@ performance = function(xtab, desc=""){
 # Set train data and test data
 census.train.logreg = final_df1_clean
 census.test.logreg = final_df3_clean
-V15.test = census.test.logreg$V15
+V15.test = census.test.logreg$V15..50K
 
 # Preprocess train data
 census.train.logreg$V15..50K = trimws(as.character(census.train.logreg$V15..50K))
@@ -276,6 +245,10 @@ census.train.logreg$V15..50K = NULL
 census.test.logreg$V15..50K = trimws(as.character(census.test.logreg$V15..50K))
 census.test.logreg$Income = factor(ifelse(census.test.logreg$V15..50K == ">50K.", "Yes", "No"))
 census.test.logreg$V15..50K = NULL
+
+# Remove unused columns
+census.train.logreg$V14.Holand.Netherlands=NULL
+census.train.logreg$V14..=NULL
 
 # Fit logistic regression model on training data
 logreg.fits = glm(Income ~ V1+V2.Federal.gov+V2.Local.gov+V2.Private+V2.Self.emp.inc
@@ -305,12 +278,13 @@ logreg.fits = glm(Income ~ V1+V2.Federal.gov+V2.Local.gov+V2.Private+V2.Self.emp
 logreg.probs = predict(logreg.fits, newdata = census.test.logreg, type = "response")
 
 # Convert probabilities to class predictions
-logreg.predictions = ifelse(logreg.probs > 0.5, "Yes", "No")
+cutoff = 2.900701465506e-12 #??
+logreg.predictions = ifelse(logreg.probs > cutoff, "Yes", "No")
 logreg.predictions = factor(logreg.predictions, levels = c("No", "Yes"))
 
 # Evaluate the model
-cfmat = table(logreg.predictions, V15.test)
-performance(cfmat, "Performance of Logistic Regression Model on Census Income")
+cfmat.logreg = table(logreg.predictions, V15.test)
+performance(cfmat.logreg, "Performance of Logistic Regression Model on Census Income")
 
 14. Naive Bayes
 
@@ -325,67 +299,44 @@ census.train.nb$V14.Holand.Netherlands = NULL
 census.train.nb$V14.. = NULL
 
 # Convert into categorical data
-census.train.nb$V15...50K = as.factor(census.train.nb$V15...50K)
-census.test.nb$V15...50K = as.factor(census.test.nb$V15...50K)
+census.train.nb$V15..50K = as.factor(census.train.nb$V15..50K)
+census.test.nb$V15..50K = as.factor(census.test.nb$V15..50K)
 
 # Training and validation with Naive Bayes with Laplace smoothing
 cat("\nTraining and validation with Naive Bayes ...\n\n")
-model.nb = naive_bayes(V15...50K ~ ., data = census.train.nb, laplace = 1)
+model.nb = naive_bayes(V15..50K ~ ., data = census.train.nb, laplace = 1)
 
 # Get predictions
 pred.nb = predict(model.nb, census.test.nb)
-nb_confusion_matrix=confusionMatrix(pred.nb, census.test.nb$V15...50K)
+nb_confusion_matrix=confusionMatrix(pred.nb, census.test.nb$V15..50K)
 print(nb_confusion_matrix)
-
-# Evaluation for Binary Classification using formulas (performance?)
-cfmat = table(pred.nb, census.test.nb$V15...50K)
-ACR = sum(diag(cfmat)) / sum(cfmat)
-TPR = cfmat[1,1] / sum(cfmat[,1])
-TNR = cfmat[2,2] / sum(cfmat[,2])
-PPV = cfmat[1,1] / sum(cfmat[1,])
-NPV = cfmat[2,2] / sum(cfmat[2,])
-FPR = 1 - TNR
-FNR = 1 - TPR
-RandomAccuracy = (sum(cfmat[,2]) * sum(cfmat[2,]) + 
-                  sum(cfmat[,1]) * sum(cfmat[1,])) / (sum(cfmat)^2)
-Kappa = (ACR - RandomAccuracy) / (1 - RandomAccuracy)
-
-print(cfmat)
-cat("\n      Accuracy :", ACR, "\n")
-cat("\n         Kappa :", Kappa, "\n")
-cat("\n   Sensitivity :", TPR, "\n")
-cat("\n   Specificity :", TNR, "\n")
-cat("\nPos Pred Value :", PPV, "\n")
-cat("\nNeg Pred Value :", NPV, "\n")
-cat("\n           FPR :", FPR, "\n")
-cat("\n           FNR :", FNR, "\n")
 
 15. Decision Tree
 # Set train data and test data
-census.train=df1_clean
-census.test=df3_clean
+census.train.dt=df1_clean
+census.test.dt=df3_clean
 
-# Add new column "Income"("Income"="Yes" if "V15" =">50K" and "No" if "V15" not equal ">50K") for both census.train and census.test while remove column "V15" in both census.train and census.test
-census.test$V15=trimws(as.character(census.test$V15))
-census.test$Income=factor(ifelse(census.test$V15 == ">50K", "Yes", "No"))
-census.test$V15=NULL
-census.train$V15=trimws(as.character(census.train$V15))
-census.train$Income=factor(ifelse(census.train$V15 == ">50K", "Yes", "No"))
-census.train$V15=NULL
+# Add new column "Income"("Income"="Yes" if "V15" =">50K" and "No" if "V15" not equal ">50K") for both census.train.dt and census.test.dt while remove column "V15" in both census.train.dt and census.test.dt
+census.test.dt$V15=trimws(as.character(census.test.dt$V15))
+census.test.dt$Income=factor(ifelse(census.test.dt$V15 == ">50K", "Yes", "No"))
+census.test.dt$V15=NULL
+census.train.dt$V15=trimws(as.character(census.train.dt$V15))
+census.train.dt$Income=factor(ifelse(census.train.dt$V15 == ">50K", "Yes", "No"))
+census.train.dt$V15=NULL
 
 # Perform Decision Tree Model
 library(rpart)
 library(rpart.plot)
-rpart.census=rpart(Income~.,census.train)
+rpart.census=rpart(Income~.,census.train.dt)
 rpart.plot(rpart.census)
 
 # Evaluate Decision Tree Model performance
-census.pred=predict(rpart.census, census.test, type = "class")
-confusionMatrix(census.pred, census.test$Income)
+census.pred=predict(rpart.census, census.test.dt, type = "class")
+confusionMatrix(census.pred, census.test.dt$Income)
 
 # AUROC for Decision Tree Model
 library(pROC)
-census.probs=predict(rpart.census, census.test, type = "prob")
-roc_curve_dt=roc(census.test$Income, census.probs[, 2])
+census.probs=predict(rpart.census, census.test.dt, type = "prob")
+roc_curve_dt=roc(census.test.dt$Income, census.probs[, 2])
 plot(roc_curve_dt)
 auc(roc_curve_dt)
