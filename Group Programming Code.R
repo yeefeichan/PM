@@ -129,7 +129,7 @@ plot(df_clean)
 
 10. PCA
 df_clean_scale = scale(df_clean, scale=TRUE)
-PCA = prcomp(df_clean_scale)
+PCA = prcomp(df_clean_scale, scale=TRUE)
 print(PCA)
 print(summary(PCA))
 plot(PCA)
@@ -142,7 +142,12 @@ plot(pr.var, xlab = 'i', ylab = expression(paste(lambda,'_i',sep='')), main = 'S
 plot(pve, ylim=c(0,1), type='b', xlab="Principal Component",
   ylab="Proportion of Variance Explained")
 lines(cumsum(pve), ylim=c(0,1), type='b', xlab="Principal Component",
-  ylab="Cumulative Proportion of Variance Explained")
+  ylab="Cumulative Proportion of Variance Explained") 
+
+par(mfrow=c(1,2))
+plot(pve,  type="o", ylab="PVE", xlab="Principal Component", col="blue")
+plot(cumsum(pve), type="o", ylab="Cumulative PVE", 
+  xlab="Principal Component", col="purple")
 
 11. k-Means Clustering
 set.seed(123)
