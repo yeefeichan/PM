@@ -317,6 +317,23 @@ model.nb = naive_bayes(V15..50K ~ ., data = census.train.nb, laplace = 1)
 pred.nb = predict(model.nb, census.test.nb)
 nb_confusion_matrix=confusionMatrix(pred.nb, census.test.nb$V15..50K)
 print(nb_confusion_matrix)
+census.probs <- predict(model.nb, census.test.nb, type = "prob")
+
+# Inspect column names of census.probs
+print(colnames(census.probs))
+
+# Correct column name for the positive class
+positive_class_col <- "1"  # Use the correct column name based on the inspection
+
+# Create ROC curve object
+roc_curve_nb <- roc(census.test.nb$V15...50K, census.probs[, positive_class_col])
+
+# Plot ROC curve
+plot(roc_curve_nb, main = "ROC Curve for Naive Bayes Model", col = "blue", lwd = 2)
+
+# Calculate and print the AUC
+auc_value <- auc(roc_curve_nb)
+cat("AUC:", auc_value, "\n")
 
 15. Decision Tree
 # Set train data and test data
