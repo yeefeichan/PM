@@ -292,6 +292,20 @@ logreg.predictions = factor(logreg.predictions, levels = c("No", "Yes"))
 cfmat.logreg = table(logreg.predictions, V15.test)
 performance(cfmat.logreg, "Performance of Logistic Regression Model on Census Income")
 
+# Load necessary library
+library(pROC)
+
+# Create ROC curve
+roc_curve = roc(V15.test, logreg.probs, levels = c("0", "1"))
+
+# Plot ROC curve
+plot(roc_curve, main = "AUROC Curve for Logistic Regression Model")
+
+# Calculate AUC (Area Under the Curve)
+auc_value = auc(roc_curve)
+cat("AUC:", auc_value, "\n")
+
+
 14. Naive Bayes
 
 library(naivebayes)
