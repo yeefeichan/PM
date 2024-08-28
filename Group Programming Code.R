@@ -72,7 +72,7 @@ df3$V2 = replace(df3$V2, df3$V2 == " ?", NA)
 df3$V7 = replace(df3$V7, df3$V7 == " ?", NA)
 df3$V14 = replace(df3$V14, df3$V14 == " ?", NA)
 
-df3$V15 = gsub("\\.","",df3$V15) #gsub??? @eddieeeeee
+df3$V15 = gsub("\\.","",df3$V15)
 
 df3_clean = na.omit(df3)
 rownames(df3_clean) = seq_len(nrow(df3_clean))
@@ -119,7 +119,7 @@ for (i in 1:15) { hist(df_clean[,i],col=rainbow(length(df_clean)),xlab="",main=c
 
 9. EDA: Numeric Bivariate Analysis
 
-library(corrplot) #Or ggplot?
+library(corrplot)
 cor_matrix=cor(df_clean[, sapply(df_clean, is.numeric)])
 corrplot(cor_matrix, method="circle")
 
@@ -285,8 +285,7 @@ logreg.fits = glm(Income ~ V1+V2.Federal.gov+V2.Local.gov+V2.Private+V2.Self.emp
 logreg.probs = predict(logreg.fits, newdata = census.test.logreg, type = "response")
 
 # Convert probabilities to class predictions
-cutoff = 2.900701465506e-12 #??
-logreg.predictions = ifelse(logreg.probs > cutoff, "Yes", "No")
+logreg.predictions = ifelse(logreg.probs > 0.5, "Yes", "No")
 logreg.predictions = factor(logreg.predictions, levels = c("No", "Yes"))
 
 # Evaluate the model
