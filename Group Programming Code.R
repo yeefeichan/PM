@@ -157,7 +157,7 @@ library(cluster)
 clusplot(df_clean_scale, kmc$cluster, main=paste0("k-Means Clustering (K=2, seed=",123,")"), 
 	 xlab="x", ylab="y", cex=2)
 
-12. kNN
+12. k-NN
 
 # Set the training data and testing data
 census.train.knn = final_df1_clean
@@ -171,18 +171,18 @@ census.train.knn$V14.. = NULL
 census.train.knn$V15..50K = as.factor(census.train.knn$V15..50K)
 census.test.knn$V15..50K = as.factor(census.test.knn$V15..50K)
 
-# Perform kNN 
+# Perform k-NN 
 library(kknn)
 cat("\nTraining and validation with wkNN ...\n\n")
 census.kknn = kknn(V15..50K ~ ., census.train.knn, census.test.knn, k = 1)
 
-# Evaluating kNN model performance
+# Evaluating k-NN model performance
 yhat.kknn = fitted(census.kknn)
 yhat.kknn = factor(yhat.kknn, levels=levels(census.test.knn$V15..50K))
 knn_confusion_matrix = confusionMatrix(yhat.kknn, census.test.knn$V15..50K)
 print(knn_confusion_matrix)
 
-# AUROC for kNN
+# AUROC for k-NN
 library(pROC)
 yhat.prob = census.kknn$prob[,2]
 roc_curve_knn = roc(census.test.knn$V15..50K, yhat.prob)
@@ -286,7 +286,7 @@ roc_curve = roc(V15.test, logreg.probs, levels = c("0", "1"))
 plot(roc_curve, main = "AUROC Curve for Logistic Regression Model")
 auc(roc_curve)
 
-14. Naive Bayes
+14. Naïve Bayes
 
 library(naivebayes)
 
@@ -302,7 +302,7 @@ census.train.nb$V14.. = NULL
 census.train.nb$V15..50K = as.factor(census.train.nb$V15..50K)
 census.test.nb$V15..50K = as.factor(census.test.nb$V15..50K)
 
-# Training and validation with Naive Bayes with Laplace smoothing
+# Training and validation with Naïve Bayes with Laplace smoothing
 cat("\nTraining and validation with Naive Bayes ...\n\n")
 model.nb = naive_bayes(V15..50K ~ ., data = census.train.nb, laplace = 1)
 
@@ -318,10 +318,10 @@ print(colnames(census.probs))
 # Correct column name for the positive class
 positive_class_col = "1"  # Use the correct column name based on the inspection
 
-# AUROC for Naive Bayes
+# AUROC for Naïve Bayes
 library(pROC)
 roc_curve_nb = roc(census.test.nb$V15...50K, census.probs[, positive_class_col])
-plot(roc_curve_nb, main="ROC Curve for Naive Bayes Model", col="blue", lwd=2)
+plot(roc_curve_nb, main="ROC Curve for Naïve Bayes Model", col="blue", lwd=2)
 auc(roc_curve_nb)
 
 15. Decision Tree
