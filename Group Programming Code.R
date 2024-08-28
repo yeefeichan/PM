@@ -250,7 +250,7 @@ census.train.logreg$V15..50K = NULL
 
 # Preprocess test data
 census.test.logreg$V15..50K = trimws(as.character(census.test.logreg$V15..50K))
-census.test.logreg$Income = factor(ifelse(census.test.logreg$V15..50K == ">50K.", "Yes", "No"))
+census.test.logreg$Income = factor(ifelse(census.test.logreg$V15..50K == ">50K", "Yes", "No"))
 census.test.logreg$V15..50K = NULL
 
 # Remove unused columns
